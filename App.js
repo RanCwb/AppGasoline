@@ -1,42 +1,54 @@
 import React,{useState} from 'react';
-import { StyleSheet, Text, View, Modal, SafeAreaView, TouchableOpacity, Image, TextInput, Alert, Button} from 'react-native';
+import { StyleSheet, Text, View, Modal, SafeAreaView, TouchableOpacity, Image, TextInput, Alert, Button, NativeAppEventEmitter} from 'react-native';
 
 
 
 export default function App() {
 
-  const [modalVisible,setModal] = useState(false)
+  const [modalVisible1,setModal1] = useState(false)
 
-  
-  
+  const [modalVisible2,setModal2] = useState(false);
 
-  const [valor1, setValor1] = useState(' ');
-  const [valor2, setValor2] = useState(' ');
+  const [valor1, setValor1] = useState(null);
 
+  const [valor2, setValor2] = useState('');
+ 
   const [resultado, setResultado] = useState('');
-  
-  
 
-    function divide() {z
+  const [text, setText] = useState('Limpar');   
+
+    function limpar() {
+
+     setValor1('');
+
+     setValor2('');
+
+    }
+
+    function divide() {
 
       const resultado = parseFloat(valor1) / parseFloat(valor2)
+
       setResultado(resultado.toFixed(2))
 
-      if (resultado < 0.7 ){
-        setModal(true)
-       
-      } else if (resultado > 0.7) {
-        alert('abasteça com gasolina')
-       setModal(false)
-          
-      }else{
+      if (resultado < 0.7) {
 
-        (valor1 && valor2 == ' ')
-          alert('Digite os preços!')
+        setModal1(true)
+
+      } else if ( resultado > 0.7) {
+
+        setModal2(true)
+
+      }  else  {
+        
+        valor1 && valor2 === ' '
+
+         alert('Digite os preços')
+
       }
-      
-    } 
 
+    } 
+    
   return (
 
     <SafeAreaView style={styles.container}>
@@ -65,43 +77,58 @@ export default function App() {
             style={styles.txtInput}
             keyboardType='numeric'
             value={valor2}
-            onChangeText={setValor2}
+            onChangeText={setValor2}     
             />
             </View>
           
         </View>
 
-         <View>
+         <View style={styles.tcont}>
 
         <TouchableOpacity style={styles.cont} onPress={divide}>
           <Text style={styles.botaoB}>Calcular</Text>
         </TouchableOpacity>
 
-          <Modal  style={styles.modalsty}visible={modalVisible} transparent={false} animationType={'fade'} >
+        
+        <TouchableOpacity style={styles.cont} onPress={limpar}>
+          <Text style={styles.botaoB}>{text}</Text>
+        </TouchableOpacity>
+        
 
-               
-            <View style={styles.modalFooter}>
-                  <Image
-                    style={styles.imgSecond}
-                    source={require('./src/img/logo.png')}
-                    />
-                     <Text style={styles.finalTxt}>Você deve abastecer com alcool!</Text>
-                  <TouchableOpacity style={styles.modalButton}  onPress={()=> setModal(false)}>
-                      <Text style={styles.finalBtn}>Calcular Novamente! </Text>
-                  </TouchableOpacity>
-             </View>
+          <Modal  style={styles.modalsty}visible={modalVisible1} transparent={false} animationType={'fade'} >
+
+              <View style={styles.modalFooter}>
+                    <Image
+                      style={styles.imgSecond}
+                      source={require('./src/img/logo.png')}
+                      />
+                      <Text style={styles.finalTxt}>Você deve abastecer com alcool!</Text>
+                    <TouchableOpacity style={styles.modalButton}  onPress={()=> setModal1(false)}>
+                        <Text style={styles.finalBtn}>CALCULAR NOVAMENTE </Text>
+                    </TouchableOpacity>
+              </View>
 
           </Modal>
 
+            <Modal style={styles.modalsty} visible={modalVisible2} transparent={false} animationType={'fade'}>
+                  <View style={styles.modalFooter}>
+                      <Image
+                        source={require('./src/img/alcool.jpg')}
+                        style={styles.imgSecond}
+                      />
+                      <Text style={styles.finalTxt}>Você deve abastecer com Gasolina!!</Text>
+                        <TouchableOpacity style={styles.modalButton} onPress={()=> setModal2(false)}>
+                              <Text style={styles.finalBtn}>CALCULAR NOVAMENTE</Text>
+                        </TouchableOpacity>
+                  </View>
+
+
+            </Modal>
 
          </View>
            
 
-
     </SafeAreaView>
-
-
-
   )
 }
 
@@ -118,21 +145,29 @@ const styles = StyleSheet.create({
     textAlign:'center',
     paddingBottom:30,
     fontWeight:'bold',
-    fontSize:24
+    fontSize:24,
+    margin:10
   
+  },
+
+  cont:{
 
 
   },
+  tcont:{
+
+  display:'flex'
+
+  },  
   modalsty:{
    
 
 
   },
  modalButton:{
-        height:150,
+
+        height:150,    
         display:'flex'
-
-
   },  
   finalBtn:{
       paddingTop:10,
@@ -150,11 +185,13 @@ const styles = StyleSheet.create({
   },
 
   imgSecond:{
-   height:150,
-   width:150,
+   height:200,
+   width:200,
   alignSelf: 'center',
   marginTop: 'auto',
-  justifyContent:'space-around'
+  justifyContent:'space-around',
+  borderRadius:30
+
     
   },
 
@@ -227,7 +264,8 @@ const styles = StyleSheet.create({
     fontSize:18,
     marginHorizontal:50,
     textAlign:'center',
-    backgroundColor:'#ffff'
+    backgroundColor:'#ffff',
+    margin:10
   },
 
   botaoEdit:{
